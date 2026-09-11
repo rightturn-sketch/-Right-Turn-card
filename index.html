@@ -252,8 +252,16 @@
         <input type="text" id="bOrderNo" placeholder="例：OAE20260906001" value="">
       </div>
       <div class="field">
-        <label>預約時間</label>
+        <label>去程時間</label>
         <input type="datetime-local" id="bTime" value="">
+      </div>
+      <div class="field">
+        <label>回程時間（來回行程才需填寫）</label>
+        <input type="datetime-local" id="bReturnTime" value="">
+      </div>
+      <div class="field">
+        <label>費用</label>
+        <input type="text" id="bPrice" placeholder="例：NT$1,200" value="">
       </div>
     </div>
 
@@ -469,7 +477,7 @@ function escapeHtml(s){
 ['fName','fPhone','fModel','fPlate'].forEach(id=>{
   document.getElementById(id).addEventListener('input', renderInfo);
 });
-['bCustomer','bOrderNo','bTime'].forEach(id=>{
+['bCustomer','bOrderNo','bTime','bReturnTime','bPrice'].forEach(id=>{
   document.getElementById(id).addEventListener('input', renderBooking);
 });
 renderInfo();
@@ -488,13 +496,17 @@ function renderBooking(){
   const customer = document.getElementById('bCustomer').value.trim();
   const orderNo = document.getElementById('bOrderNo').value.trim();
   const time = document.getElementById('bTime').value;
+  const returnTime = document.getElementById('bReturnTime').value;
+  const price = document.getElementById('bPrice').value.trim();
 
   const titleEl = document.getElementById('bookingTitle');
   titleEl.textContent = customer ? `${customer}，您的預約已成功完成` : '您的預約已成功完成';
 
   const rows = [];
   if(orderNo) rows.push(`<div class="info-row"><span class="k">訂單編號</span><span class="v">${escapeHtml(orderNo)}</span></div>`);
-  if(time) rows.push(`<div class="info-row"><span class="k">預約時間</span><span class="v">${escapeHtml(formatBookingTime(time))}</span></div>`);
+  if(time) rows.push(`<div class="info-row"><span class="k">去程時間</span><span class="v">${escapeHtml(formatBookingTime(time))}</span></div>`);
+  if(returnTime) rows.push(`<div class="info-row"><span class="k">回程時間</span><span class="v">${escapeHtml(formatBookingTime(returnTime))}</span></div>`);
+  if(price) rows.push(`<div class="info-row"><span class="k">費用</span><span class="v">${escapeHtml(price)}</span></div>`);
 
   const box = document.getElementById('infoBoxBooking');
   if(rows.length){
